@@ -1,0 +1,40 @@
+{
+    "name": "vocweb/oauth2-lazada",
+    "description": "OAuth2 for Lazada",
+    "type": "library",
+    "require": {
+        "php": "^7.4|^8.0",
+        "league/oauth2-client": "^2.6",
+        "illuminate/support": "^9.45"
+    },
+    "license": "MIT",
+    "keywords": [
+        "oauth",
+        "oauth2",
+        "authorization",
+        "authentication",
+        "lazada"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Vocweb\\Oauth2Lazada\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Vocweb\\Oauth2Lazada\\Oauth2LazadaServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Tien Chu",
+            "email": "chutien@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "mockery/mockery": "^1.5"
+    }
+}
