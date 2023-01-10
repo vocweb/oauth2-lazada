@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Vocweb\Oauth2Tiki\Providers;
+namespace Vocweb\Oauth2Lazada\Providers;
 
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 
-class TikiResourceOwner implements ResourceOwnerInterface
+class LazadaResourceOwner implements ResourceOwnerInterface
 {
 	protected array $response;
 

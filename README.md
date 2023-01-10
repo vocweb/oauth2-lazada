@@ -1,4 +1,4 @@
-# Tiki Provider for OAuth 2.0 client 
+# Lazada Provider for OAuth 2.0 client 
 
 ## Requirments
 
@@ -10,7 +10,7 @@ The following versions of PHP are supported.
 ## Installation
 
 ```bash
-$ composer require vocweb/oauth2-tiki
+$ composer require vocweb/oauth2-lazada
 ```
 
 ## Flow authorization
@@ -18,9 +18,9 @@ $ composer require vocweb/oauth2-tiki
 ```php 
 <?php 
 
-use Vocweb\Oauth2Tiki\Providers\TikiAuthProvider;
+use Vocweb\Oauth2Lazada\Providers\LazadaAuthProvider;
 
-$provider = new TikiAuthProvider([
+$provider = new LazadaAuthProvider([
     'clientId' => 'xyz',
     'clientSecret' => 'xyz',
     'redirectUri' => 'https://example.com/callback-url'
@@ -70,9 +70,9 @@ if (!isset($_GET['code'])) {
 ```php 
 <?php
  
-use Vocweb\Oauth2Tiki\Providers\TikiAuthProvider;
+use Vocweb\Oauth2Lazada\Providers\LazadaAuthProvider;
 
-$provider = new TikiAuthProvider([
+$provider = new LazadaAuthProvider([
     'clientId' => 'xyz',
     'clientSecret' => 'xyz',
     'redirectUri' => null
@@ -91,4 +91,4 @@ $ ./vendor/bin/phpunit
 
 ## License
 
-The MIT License (MIT). Please see [License File](https://github.com/bastiaandewaele/oauth2-Tiki/blob/master/LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](https://github.com/bastiaandewaele/oauth2-Lazada/blob/master/LICENSE.md) for more information.
