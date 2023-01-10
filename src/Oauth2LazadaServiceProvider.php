@@ -1,6 +1,6 @@
 <?php
 
-namespace Vocweb\Oauth2Tiki;
+namespace Vocweb\Oauth2Lazada;
 
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Application;

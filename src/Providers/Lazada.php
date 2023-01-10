@@ -129,7 +129,7 @@ class Lazada extends AbstractProvider
 	 */
 	public function getResourceOwnerDetailsUrl(AccessToken $token): string
 	{
-		return 'https://api.tiki.vn/integration/v2/sellers/me';
+		return 'https://api.lazada.vn/integration/v2/sellers/me';
 	}
 
 	/**
