@@ -26,6 +26,21 @@ class Lazada extends AbstractProvider
 	const ACCESS_TOKEN_RESOURCE_OWNER_ID = null;
 
 	/**
+	 * Run API in country
+	 *
+	 * @var string
+	 */
+	public $country = 'vn';
+	private $supportCoutries = [
+		'sg' => 'Singapore',
+		'my' => 'Malaysia',
+		'ph' => 'Philippines',
+		'th' => 'Thailand',
+		'id' => 'Indonesia',
+		'vn' => 'Vietnam',
+	];
+
+	/**
 	 * Default host
 	 */
 	protected $host = 'https://auth.lazada.com/rest';
@@ -40,16 +55,44 @@ class Lazada extends AbstractProvider
 
 	/**
 	 * Api token endpoint
-	 * Doc: https://open.lazada.com/apps/doc/api?path=%2Fauth%2Ftoken%2Fcreate
+	 * Doc: https://open.lazada.com/apps/doc/doc?nodeId=10777&docId=108260
 	 *
 	 * @var string
 	 */
 	public $apiTokenEndPoint = 'https://auth.lazada.com/rest/auth/token/create';
+	public $apiRefreshTokenEndPoint = 'https://auth.lazada.com/rest/auth/token/refresh';
+
+	/**
+	 * Seller detail url
+	 * https://open.lazada.com/apps/doc/api?path=%2Fseller%2Fget
+	 *
+	 * @var array
+	 */
+	protected $ownerDetailUrl = [
+		'sg' => 'https://api.lazada.sg/rest',
+		'my' => 'https://api.lazada.com.my/rest',
+		'ph' => 'https://api.lazada.com.ph/rest',
+		'th' => 'https://api.lazada.co.th/rest',
+		'id' => 'https://api.lazada.co.id/rest',
+		'vn' => 'https://api.lazada.vn/rest',
+	];
 
 	public function __construct(array $options = [], array $collaborators = [])
 	{
+		// Check & set country
+		if (isset($options['country']) && !array_key_exists($options['country'], $this->supportCoutries)) {
+			throw new \Exception(__METHOD__ . ":: Country not support");
+		}
+
+		if (isset($options['country']) && array_key_exists($options['country'], $this->supportCoutries)) {
+			$this->country = $options['country'];
+			unset($options['country']);
+		}
+
+		//
 		parent::__construct($options, $collaborators);
 
+		//
 		$this->getGrantFactory()->setGrant('authorization_code', new LazadaAuthorizationCodeGrant());
 		$this->getGrantFactory()->setGrant('refresh_token', new LazadaRefreshTokenGrant());
 		// $this->setOptionProvider(new LazadaOptionProvider());
@@ -82,7 +125,7 @@ class Lazada extends AbstractProvider
 	{
 		if ($params['grant_type'] === 'refresh_token') {
 			// Refresh token requires calling a different URL
-			return $this->apiTokenEndPoint;
+			return $this->apiRefreshTokenEndPoint;
 		}
 
 		return $this->apiTokenEndPoint;
@@ -97,7 +140,7 @@ class Lazada extends AbstractProvider
 
 		$options['client_id'] 	= $options['client_id'];
 		$options['force_auth'] 	= "true";
-		$options['country'] 	= "vn";
+		$options['country'] 	= $this->country;
 
 		return $options;
 	}
@@ -129,7 +172,7 @@ class Lazada extends AbstractProvider
 	 */
 	public function getResourceOwnerDetailsUrl(AccessToken $token): string
 	{
-		return 'https://api.lazada.vn/integration/v2/sellers/me';
+		return $this->ownerDetailUrl[$this->country] . "/seller/get";
 	}
 
 	/**
@@ -139,31 +182,38 @@ class Lazada extends AbstractProvider
 	 */
 	public function fetchResourceOwnerDetails(AccessToken $token): array
 	{
-		$url = $this->getResourceOwnerDetailsUrl($token);
+		// $url = $this->getResourceOwnerDetailsUrl($token);
 
+		// $options = [
+		// 	'headers' => $this->getDefaultHeaders(),
+		// 	'body' => json_encode(
+		// 		[
+		// 			'open_id' => $token->getResourceOwnerId(),
+		// 			'access_token' => $token->getToken(),
+		// 			'fields' => [
+		// 				"open_id",
+		// 				"union_id",
+		// 				"avatar_url",
+		// 				"avatar_url_100",
+		// 				"avatar_url_200",
+		// 				"avatar_large_url",
+		// 				"display_name",
+		// 				"profile_deep_link",
+		// 				"bio_description",
+		// 			],
+		// 		]
+		// 	),
+		// ];
+
+		// $request = $this->createRequest(self::METHOD_POST, $url, null, $options);
+
+		// return $this->getParsedResponse($request);
+
+		$url = $this->getResourceOwnerDetailsUrl($token);
 		$options = [
 			'headers' => $this->getDefaultHeaders(),
-			'body' => json_encode(
-				[
-					'open_id' => $token->getResourceOwnerId(),
-					'access_token' => $token->getToken(),
-					'fields' => [
-						"open_id",
-						"union_id",
-						"avatar_url",
-						"avatar_url_100",
-						"avatar_url_200",
-						"avatar_large_url",
-						"display_name",
-						"profile_deep_link",
-						"bio_description",
-					],
-				]
-			),
 		];
-
-		$request = $this->createRequest(self::METHOD_POST, $url, null, $options);
-
+		$request = $this->createRequest(self::METHOD_GET, $url, null, $options);
 		return $this->getParsedResponse($request);
 	}
 

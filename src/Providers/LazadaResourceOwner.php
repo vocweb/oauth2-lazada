@@ -6,6 +6,10 @@ namespace Vocweb\Oauth2Lazada\Providers;
 
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 
+/**
+ * Lazada resource owner
+ * https://open.lazada.com/apps/doc/api?path=%2Fseller%2Fget
+ */
 class LazadaResourceOwner implements ResourceOwnerInterface
 {
 	protected array $response;
@@ -22,6 +26,11 @@ class LazadaResourceOwner implements ResourceOwnerInterface
 
 	public function getId(): string
 	{
-		return $this->response['data']['user']['open_id'];
+		return $this->response['data']['seller_id'];
+	}
+
+	public function getName(): string
+	{
+		return $this->response['data']['name'];
 	}
 }
